@@ -1,1 +1,18 @@
+from pynput.keyboard import Key, Controller, Listener
 
+keyboard = Controller()
+
+# Функция, которая срабатывает при нажатии клавиши
+def on_press(key):
+    try:
+        # Если нажата клавиша 'a', то автоматически нажимается 'b'
+        if key.char == 'a':  # Проверяем, что нажата клавиша 'a'
+            print("Вы нажали 'a', теперь нажимаем 'b'")
+            keyboard.press('b')
+            keyboard.release('b')  # Симуляция нажатия и отпускания 'b'
+    except AttributeError:
+        pass  # Обработка специальных клавиш
+
+# Запуск прослушивателя клавиатуры
+with Listener(on_press=on_press) as listener:
+    listener.join()
