@@ -1,0 +1,33 @@
+import pyautogui
+import time
+from pynput import keyboard
+
+# Переменная для управления состоянием кликера (работает или остановлен)
+clicking = False
+
+# Функция, которая управляет кликером
+def clicker():
+    while True:
+        if clicking:
+            pyautogui.click()
+        time.sleep(1)  # Задержка между кликами в 1 секунду
+
+# Функция, которая обрабатывает нажатие клавиш
+def on_press(key):
+    global clicking
+    try:
+        if key.char == 'b':
+            clicking = False  # Останавливаем кликер при нажатии 'b'
+            print("Кликер остановлен")
+        elif key.char == 'a':
+            clicking = True  # Запускаем кликер при нажатии 'a'
+            print("Кликер запущен")
+    except AttributeError:
+        pass  # Игнорируем специальные клавиши
+
+# Прослушивание клавиатуры в отдельном потоке
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
+
+# Запуск бесконечного кликера
+clicker()
