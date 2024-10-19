@@ -1,15 +1,23 @@
 from pynput.keyboard import Key, Controller, Listener
+import time
 
 keyboard = Controller()
 
+# Таймер для отслеживания времени последнего нажатия
+last_press_time = None
+
 # Функция, которая срабатывает при нажатии клавиши
 def on_press(key):
+    global last_press_time
     try:
-        # Если нажата клавиша 'a', то автоматически нажимается 'b'
-        if key.char == 'a':  # Проверяем, что нажата клавиша 'a'
-            print("Вы нажали 'a', теперь нажимаем 'b'")
-            keyboard.press('b')
-            keyboard.release('b')  # Симуляция нажатия и отпускания 'b'
+        # Если нажата клавиша 'a', то проверяем время последнего нажатия
+        if key.char == 'a':
+            current_time = time.time()
+            if last_press_time is None or (current_time - last_press_time) >= 10:
+                print("Вы нажали 'a', теперь нажимаем 'b' через 30 секунд")
+                keyboard.press('b')
+                keyboard.release('b')  # Симуляция нажатия и отпускания 'b'
+                last_press_time = current_time  # Обновляем время последнего нажатия
     except AttributeError:
         pass  # Обработка специальных клавиш
 
